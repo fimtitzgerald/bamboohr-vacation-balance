@@ -21,17 +21,11 @@ type Resp1 struct {
 var authKey = os.Getenv("MY_BB_API")
 var employeeID = os.Getenv("BB_ID")
 
-func main() {
-
-	inArgs := os.Args[1:]
-
-	currentTime := time.Now().Local()
-	baseURL := fmt.Sprintf("https://api.bamboohr.com/api/gateway.php/unbounce/v1/employees/%s/time_off/calculator/?end=%v", employeeID, currentTime.Format("2006-01-02"))
-
-	req, _ := http.NewRequest("GET", baseURL, nil)
-
+//build the API request
+func makeRequest(url string, key string) ([]byte, error) {
+	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Add("Accept", "application/json")
-	req.SetBasicAuth(authKey, "")
+	req.SetBasicAuth(key, "")
 	req.Header.Add("Cache-Control", "no-cache")
 
 	resp, err := http.DefaultClient.Do(req)
@@ -41,6 +35,18 @@ func main() {
 	}
 
 	content, _ := ioutil.ReadAll(resp.Body)
+
+	return content, err
+}
+
+func main() {
+
+	inArgs := os.Args[1:]
+
+	currentTime := time.Now().Local()
+	baseURL := fmt.Sprintf("https://api.bamboohr.com/api/gateway.php/unbounce/v1/employees/%s/time_off/calculator/?end=%v", employeeID, currentTime.Format("2006-01-02"))
+
+	content, err := makeRequest(baseURL, authKey)
 
 	var record []Resp1
 
