@@ -7,20 +7,23 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
+//Resp1 is response object for each type of time off
 type Resp1 struct {
-	TimeOffType string `json:"timeOffType`
+	TimeOffType string `json:"timeOffType"`
 	Balance     string `json:"balance"`
 }
 
 var authKey = os.Getenv("MY_BB_API")
-var employeeId = os.Getenv("BB_ID")
+var employeeID = os.Getenv("BB_ID")
 
 func main() {
-	base_url := fmt.Sprintf("https://api.bamboohr.com/api/gateway.php/unbounce/v1/employees/%s/time_off/calculator/?end=2018-06-11", employeeId)
+	currentTime := time.Now().Local()
+	baseURL := fmt.Sprintf("https://api.bamboohr.com/api/gateway.php/unbounce/v1/employees/%s/time_off/calculator/?end=%v", employeeID, currentTime.Format("2006-01-02"))
 
-	req, _ := http.NewRequest("GET", base_url, nil)
+	req, _ := http.NewRequest("GET", baseURL, nil)
 
 	req.Header.Add("Accept", "application/json")
 	req.SetBasicAuth(authKey, "")
