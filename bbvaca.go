@@ -14,6 +14,7 @@ import (
 type Resp1 struct {
 	TimeOffType string `json:"timeOffType"`
 	Balance     string `json:"balance"`
+	TimeOffName string `json:"name"`
 }
 
 var authKey = os.Getenv("MY_BB_API")
@@ -44,7 +45,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	fmt.Println(record[0].TimeOffType)
-	fmt.Println(record[0].Balance)
+	for i := range record {
+		fmt.Println("Your", record[i].TimeOffName, "balance is:", record[i].Balance, "days")
+	}
+	//fmt.Println("Your vacation balance is:", record[0].Balance, "days")
 }
