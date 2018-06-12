@@ -4,5 +4,4 @@ This is a very simple tool to retrieve your vacation balance from BambooHR. It i
 
 #### TO DO
 
-* set the `end-date` dynamically based on current date. 
-* account for different time off types. 
+* refactor code out of the `main` function
